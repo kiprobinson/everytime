@@ -1,0 +1,3 @@
+Converted .png to .ico here: https://icoconvert.com/
+
+Used option "Multi-size in one icon", and selected 16, 32, 48, 64, 128, 256
