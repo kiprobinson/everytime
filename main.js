@@ -1,5 +1,5 @@
-//to run:   electron . 
-//to generate exe:  electron-packager . everytime --platform=win32 --arch=x64 --overwrite
+//to run from node: npm run start
+//to generate exe:  npm run package
 
 const {app, Tray, Menu, BrowserWindow} = require('electron');
 const path = require('path');

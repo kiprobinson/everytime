@@ -1,12 +1,23 @@
 {
   "name": "everytime",
   "version": "0.0.1",
+  "author": {
+    "name": "Kip Robinson",
+    "url": "https://ampersand.space"
+  },
+  "homepage": "https://github.com/kiprobinson/everytime",
+  "repository": "github:kiprobinson/everytime",
   "main": "main.js",
+  "private": true,
   "dependencies": {
     "moment-timezone": "^0.5.23"
   },
   "devDependencies": {
     "electron": "^4.1.1",
     "electron-packager": "^13.1.1"
+  },
+  "scripts": {
+    "start": "electron .",
+    "package": "electron-packager . everytime --platform=win32 --arch=x64 --overwrite --icon=icons/app-icon.ico --out=build"
   }
 }
