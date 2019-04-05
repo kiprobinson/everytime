@@ -1,0 +1,12 @@
+{
+  "name": "everytime",
+  "version": "0.0.1",
+  "main": "main.js",
+  "dependencies": {
+    "moment-timezone": "^0.5.23"
+  },
+  "devDependencies": {
+    "electron": "^4.1.1",
+    "electron-packager": "^13.1.1"
+  }
+}
