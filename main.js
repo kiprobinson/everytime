@@ -24,7 +24,9 @@ Settings Dialog
 * Show timezone offset relative to: UTC, Local, Both
 * Time format: 24-hr, 12-hr (am/pm)
 
-When options are updated, re-draw context menu, but don't call SetTimeout()  (add new option to schedule update but default to false)
+When options are updated, save config then re-draw context menu, but don't call SetTimeout()  (add new option to schedule update but default to false)
+
+Create MSI installer with https://stackoverflow.com/questions/36398955/electron-create-msi-installer-using-electron-builder
 
 */
 
@@ -41,7 +43,7 @@ function loadConfig() {
 	
 	
 	let cleanConfig = {
-		timeFormat: 24, //either 12 or 24
+		timeFormat: 12, //either 12 or 24
 		offsetDisplay: 'utc', //one of: utc, local, both
 		timezones: [],
 	};
@@ -71,6 +73,7 @@ function loadConfig() {
 		}
 	}
 	
+	//if we don't have any timezones, at least show UTC
 	if(cleanConfig.timezones.length === 0)
 		cleanConfig.timezones.push({code: 'UTC', label: 'UTC'});
 	
@@ -120,7 +123,7 @@ function formatOffsetMins(offsetMins) {
 function updateContextMenu() {
 	let ts = moment();
 	
-	const timeFormat = (config.timeFormat === 24 ? 'HH:mm' : 'hh:mm a');
+	const timeFormat = (config.timeFormat === 24 ? 'HH:mm' : 'h:mm A');
 	const showUtcOffset = (config.offsetDisplay === 'both' || config.offsetDisplay === 'utc');
 	const showLocalOffset = (config.offsetDisplay === 'both' || config.offsetDisplay === 'local');
 	
@@ -136,7 +139,7 @@ function updateContextMenu() {
 		let offsetMins = ts.tz(tz.code).utcOffset();
 		let tzDate = Number(ts.tz(tz.code).format('YYYYMMDD'));
 		let diffDay = (tzDate < localDate ? ' (yesterday)' : (tzDate > localDate ? ' (tomorrow)' : ''));
-		let tzTime = ts.tz(tz.code).format('HH:mm');
+		let tzTime = ts.tz(tz.code).format(timeFormat);
 		
 		let offsetVsUtc = formatOffsetMins(offsetMins);
 		let offsetVsLocal = formatOffsetMins(offsetMins - localOffsetMins);
