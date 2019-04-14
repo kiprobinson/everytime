@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: Tahoma,Helvetica,sans-serif;
+      font-size: 20px;
+    }
+    .optionRow {
+      margin-bottom: 1.0em;
+    }
+    .optionLabel {
+      width: 150px;
+      font-weight: bold;
+      display: inline-block;
+      vertical-align: top;
+    }
+    .timezoneName {
+      min-width: 150px;
+    }
+    .optionValues {
+      display: inline-block;
+      vertical-align: top;
+    }
+    .optionValues label {
+      display: block;
+    }
+    input[type=text], select {
+      width: 300px;
+    }
+  </style>
+</head>
+<body>
+  <div class="optionRow">
+    <div class="optionLabel">Time format</div>
+    <div class="optionValues">
+      <label><input type="radio" name="timeFormat" id="timeFormat_12" value="12" /> 12-hour (1:37 PM)</label>
+      <label><input type="radio" name="timeFormat" id="timeFormat_24" value="24" /> 24-hour (13:37)</label>
+    </div>
+  </div>
+  
+  <div class="optionRow">
+    <div class="optionLabel">Offset display</div>
+    <div class="optionValues">
+      <label><input type="radio" name="offsetDisplay" id="offsetDisplay_utc"   value="utc"   /> Relative to UTC. (UTC+0530)</label>
+      <label><input type="radio" name="offsetDisplay" id="offsetDisplay_local" value="local" /> Relative to Local. (Local+0930)</label>
+      <label><input type="radio" name="offsetDisplay" id="offsetDisplay_both"  value="both"  /> Display both. (UTC+0530, Local+0930)</label>
+      <label><input type="radio" name="offsetDisplay" id="offsetDisplay_none"  value="none"  /> Do not display offset.</label>
+    </div>
+  </div>
+  
+  <div class="optionRow">
+    <table id="timezoneTable">
+      <tr>
+        <th>Time zones</th>
+        <th>Label</th>
+        <th></th>
+      </tr>
+      
+      <!--
+      <tr id="UTC">
+        <td class="timezoneName">UTC</td>
+        <td><input type="text" class="timezoneLabel" value="UTC Label" /></td>
+        <td><button class="removeTimezone">Remove</button></td>
+      </tr>
+      -->
+    </table>
+  </div>
+  
+  
+  <div class="optionRow">
+    <div class="optionLabel">Add time zone</div>
+    <div class="optionValues">
+      <select id="addTimeZone">
+        <option selected></option>
+        <!-- <option value="America/New_York">America/New_York (UTC-0400)</option> -->
+      </select>
+    </div>
+  </div>
+  
+  
+  <div id="debug"></div>
+  
+  <script src="./settings.js"></script>
+</body>
+</html>

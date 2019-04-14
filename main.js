@@ -1,115 +1,35 @@
+'use strict';
+
 //to run from node: npm run start
 //to generate exe:  npm run package
 
 const {app, Tray, Menu, BrowserWindow} = require('electron');
-const path = require('path');
-const moment = require('moment-timezone');
 const fs = require('fs');
+const ipc = require('electron').ipcMain;
+const moment = require('moment-timezone');
+const path = require('path');
+const url = require('url');
+const config = require('./config');
+
 
 
 const iconPath = path.join(__dirname, 'icons/tray-icon-invert.ico');
-const configPath = app.getPath('userData') + '/config.json';
+
 
 let tray = null;
 let win = null;
 let ts = moment();
-let config = {};
+let settingsWin = null;
 
 /*
 
 TODO:
 
-Settings Dialog
-* Add/remove time zones
-* Show timezone offset relative to: UTC, Local, Both
-* Time format: 24-hr, 12-hr (am/pm)
-
-When options are updated, save config then re-draw context menu, but don't call SetTimeout()  (add new option to schedule update but default to false)
-
+Finish Settings dialog for adding/removing time zones and editing labels.
 Create MSI installer with https://stackoverflow.com/questions/36398955/electron-create-msi-installer-using-electron-builder
 
 */
 
-
-function loadConfig() {
-	let rawConfigJson = '';
-	let rawConfig = {};
-	
-	try {
-		rawConfigJson = fs.readFileSync(configPath).toString();
-		rawConfig = JSON.parse(rawConfigJson);
-	}
-	catch(e) {} //don't care
-	
-	
-	let cleanConfig = {
-		timeFormat: 12, //either 12 or 24
-		offsetDisplay: 'utc', //one of: utc, local, both
-		timezones: [],
-	};
-	
-	if(rawConfig.timeFormat === 12 || rawConfig.timeFormat === 24)
-		cleanConfig.timeFormat = rawConfig.timeFormat;
-	if(['utc','local','both','none'].indexOf(rawConfig.offsetDisplay) >= 0)
-		cleanConfig.offsetDisplay = rawConfig.offsetDisplay;
-	
-	if(Array.isArray(rawConfig.timezones)) {
-		let tzNames = new Set();
-		for(let i = 0; i < rawConfig.timezones.length; i++) {
-			let rawTz = rawConfig.timezones[i];
-			if(!rawTz.code || 'string' !== typeof rawTz.code)
-				continue;
-			let zone = moment.tz.zone(rawTz.code);
-			if(zone === null || tzNames.has(zone.name))
-				continue;
-			
-			let cleanTz = {
-				code: zone.name,
-				label: (('string' === typeof rawTz.label) ? rawTz.label : zone.name)
-			}
-			
-			tzNames.add(cleanTz.name);
-			cleanConfig.timezones.push(cleanTz);
-		}
-	}
-	
-	//if we don't have any timezones, at least show UTC
-	if(cleanConfig.timezones.length === 0)
-		cleanConfig.timezones.push({code: 'UTC', label: 'UTC'});
-	
-	config = cleanConfig;
-	sortTimeZones();
-	saveConfig();
-};
-
-function sortTimeZones() {
-	let janDate = moment((new Date()).setMonth(1));
-	let julDate = moment((new Date()).setMonth(7));
-	
-	let avgOffsets = {};
-	
-	config.timezones.sort(function(a,b) {
-		if(!avgOffsets[a.code])
-			avgOffsets[a.code] = (janDate.tz(a.code).utcOffset() + julDate.tz(a.code).utcOffset())/2;
-		if(!avgOffsets[b.code])
-			avgOffsets[b.code] = (janDate.tz(b.code).utcOffset() + julDate.tz(b.code).utcOffset())/2;
-		
-		return avgOffsets[a.code] - avgOffsets[b.code];
-	});
-};
-
-function saveConfig() {
-	let rawConfigJson = '';
-	
-	try {
-		rawConfigJson = fs.readFileSync(configPath).toString();
-	}
-	catch(e) {} //don't care
-	
-	let cleanConfigJson = JSON.stringify(config, null, 2);
-	if(cleanConfigJson !== rawConfigJson)
-		fs.writeFileSync(configPath, cleanConfigJson);
-};
 
 function formatOffsetMins(offsetMins) {
 	let sign = (offsetMins < 0 ? '-' : '+');
@@ -154,23 +74,62 @@ function updateContextMenu() {
 		if(offsetDisplay !== '')
 			offsetDisplay = ` (${offsetDisplay})`;
 		
-		//let label = `${tz.label} (UTC${offset}, Local${offsetVsLocal}): ${tzTime}${diffDay}`
-		//let label = `${tz.label} (UTC${offset}, Local${offsetVsLocal}): ${tzTime}${diffDay}`
-		template.push({label: `${tz.label}${offsetDisplay}`, sublabel: `${tzTime}${diffDay}`});
+		let labelDisplay = (tz.label === '' ? tz.code : tz.label);
+		
+		template.push({label: `${labelDisplay}${offsetDisplay}`, sublabel: `${tzTime}${diffDay}`});
 		if(i < 0)
 			template.push({type: 'separator'});
 	}
 	
 	template.push({type: 'separator'});
+	template.push({label: 'Settings...', click: showSettings})
 	template.push({label: 'Quit', role: 'quit' });
 	tray.setContextMenu(Menu.buildFromTemplate(template));
+}
+
+function showSettings() {
+	if(settingsWin === null) {
+		settingsWin = new BrowserWindow({
+			width: 800,
+			height: 600,
+			title: 'Everytime Settings',
+			show: false,
+			//backgroundColor: '#2e2c29',
+			icon: path.join(__dirname, 'icons/app-icon.ico'),
+		});
+		settingsWin.setMenu(null);
+		
+		settingsWin.loadURL(url.format({
+			pathname: path.join(__dirname, 'settings.html'),
+			protocol: 'file:',
+			slashes: true
+		}));
+	  settingsWin.webContents.on('did-finish-load', () => {
+	    settingsWin.show();
+	    settingsWin.webContents.send('send-config', config);
+	  });
+	}
+  else {
+  	settingsWin.show();
+  	settingsWin.webContents.send('send-config', config);
+  }
 }
 
 app.on('ready', function(){
 	win = new BrowserWindow({show: false});
 	tray = new Tray(iconPath);
 	
-	loadConfig();
+	config.loadConfig();
+	
+	ipc.on('config-updated', function(e, _config) {
+		config.timeFormat = _config.timeFormat;
+		config.offsetDisplay = _config.offsetDisplay;
+		config.timezones = _config.timezones;
+		config.saveConfig();
+		updateContextMenu();
+	});
+	
+	ipc.on('debug-message', (e, m) => console.log(m));
 	
 	//function runs at the start of every minute to update menu
 	let updateTimer = function() {
@@ -178,9 +137,5 @@ app.on('ready', function(){
 		setTimeout(updateTimer, 60000 - (Date.now() % 60000));
 	};
 	updateTimer();
-	//tray.setToolTip('This is my application.\n\nNewline!');
-	
-	
-	//tray.on('click', () => tray.popUpContextMenu());
 	
 });
