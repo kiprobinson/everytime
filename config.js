@@ -10,7 +10,7 @@ const configPath = app.getPath('userData') + '/config.json';
 
 const validTimezones = new Set(
   moment.tz.names()
-  .filter(tz => tz.match(/^(((Africa|America|Antarctica|Asia|Australia|Europe|Arctic|Atlantic|Indian|Pacific)\/.+)|(UTC))$/))
+    .filter(tz => tz.match(/^(((Africa|America|Antarctica|Asia|Australia|Europe|Arctic|Atlantic|Indian|Pacific)\/.+)|(UTC))$/))
 );
 
 exports.timeFormat = 12;
@@ -61,7 +61,7 @@ function sanitizeConfig() {
       let cleanTz = {
         code: zone.name,
         label: (('string' === typeof rawTz.label) ? rawTz.label : '')
-      }
+      };
       
       tzNames.add(cleanTz.name);
       cleanConfig.timezones.push(cleanTz);
@@ -93,7 +93,7 @@ function sortTimeZones() {
     
     return avgOffsets[a.code] - avgOffsets[b.code];
   });
-};
+}
 
 exports.saveConfig = function() {
   sanitizeConfig();

@@ -17,10 +17,12 @@
   },
   "devDependencies": {
     "electron": "^4.1.1",
-    "electron-packager": "^13.1.1"
+    "electron-packager": "^13.1.1",
+    "eslint": "^5.16.0"
   },
   "scripts": {
     "start": "electron .",
-    "package": "electron-packager . everytime --platform=win32 --arch=x64 --overwrite --icon=icons/app-icon.ico --out=build"
+    "package": "electron-packager . everytime --platform=win32 --arch=x64 --overwrite --icon=icons/app-icon.ico --out=build",
+    "lint": "eslint \"**/*.js\" --format codeframe"
   }
 }

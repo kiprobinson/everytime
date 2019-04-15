@@ -15,17 +15,17 @@ exports.renderTemplate = function(template, params, prefix) {
   Object.keys(params).forEach(function(k) {
     let v = params[k];
     if('object' === typeof v)
-      template = renderTemplate(template, v, k + '.');
+      template = exports.renderTemplate(template, v, k + '.');
     else
       template = template.replace(new RegExp('\\{\\{' + regexQuote(prefix + k) + '\\}\\}', 'g'), escapeHtml(v));
   });
   
   //if this was not recursive call, clean up any unused template strings
-  if(prefix=='')
+  if(prefix==='')
     template = template.replace(/\{\{(.*?)\}\}/g, '');//'MISSING: [$1]');
   
   return template;
-}
+};
 
 /**
  * Escapes any characters which are special characters in a regular expression.

@@ -12,7 +12,7 @@ const timezoneAddRowTemplate = `
   </tr>
 `;
 
-document.addEventListener("DOMContentLoaded", function(event) { 
+document.addEventListener("DOMContentLoaded", function(event) {
   const ipc = require('electron').ipcRenderer;
   const moment = require('moment-timezone');
   const template = require('./template');
@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
           let label = e.target.value;
           config.timezones.forEach(tz => { if(tz.code === code) tz.label = label;});
           updateConfig();
-        })
+        });
       });
       
       //add listener on remove button
@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     config.timeFormat = Number(el('input[name=timeFormat]:checked').value);
     config.offsetDisplay = el('input[name=offsetDisplay]:checked').value;
     ipc.send('config-updated', config);
-  }
+  };
   
   let handleAddTimezone = function() {
     let tzName = el('#addTimeZone').value;

@@ -1,0 +1,32 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true,
+    "shared-node-browser": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2019
+  },
+  "extends": "eslint:recommended",
+  "rules": {
+    "indent": ["error", 2],
+    "no-console": "off",
+    "no-empty": ["error", { "allowEmptyCatch": true }],
+    "no-trailing-spaces": ["error", { "skipBlankLines": true, "ignoreComments": true }],
+    "no-template-curly-in-string": "error",
+    "no-unused-vars": "off",
+    "no-useless-escape": "off",
+    "array-callback-return": "error",
+    "block-scoped-var": "error",
+    "consistent-return": "error",
+    "default-case": "error",
+    "eqeqeq": "error",
+    "dot-location": ["error", "property"],
+    "dot-notation": ["error", { "allowKeywords": false }],
+    "curly": ["error", "multi-or-nest", "consistent"],
+    "semi": "error"
+    //see: https://eslint.org/docs/rules/
+    //stopped at no-empty-function
+  }
+}
