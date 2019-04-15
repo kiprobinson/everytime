@@ -26,6 +26,7 @@ let settingsWin = null;
 TODO:
 
 Finish Settings dialog for adding/removing time zones and editing labels.
+Settings dialog - if opened, closed, and re-opened, get an error. (First window is destroyed I think. Try to make closing it just hide it.)
 Create MSI installer with https://stackoverflow.com/questions/36398955/electron-create-msi-installer-using-electron-builder
 
 */

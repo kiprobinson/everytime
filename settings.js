@@ -1,8 +1,21 @@
 'use strict';
 
+const timezoneOptionTemplate = `
+  <option value="{{code}}">{{code}} (UTC{{offset}})</option>
+`;
+
+const timezoneAddRowTemplate = `
+  <tr class="timezoneRow">
+    <td class="timezoneName">{{code}}</td>
+    <td><input type="text" class="timezoneLabel" value="{{label}}" placeholder="Enter a label for this timezone (optional)." data-timezone-name="{{code}}" /></td>
+    <td><button class="removeTimezone" data-timezone-name="{{code}}">Remove</button></td>
+  </tr>
+`;
+
 document.addEventListener("DOMContentLoaded", function(event) { 
   const ipc = require('electron').ipcRenderer;
   const moment = require('moment-timezone');
+  const template = require('./template');
   
   let config = null;
   
@@ -19,9 +32,33 @@ document.addEventListener("DOMContentLoaded", function(event) {
     el('#offsetDisplay_both').checked  = (config.offsetDisplay === 'both');
     el('#offsetDisplay_none').checked  = (config.offsetDisplay === 'none');
     
-    //TODO: draw timezones table
-    //add listener on label input
-    //add listener on remove button
+    //draw timezone table only if number of rows has changed
+    let tbody = el('#timezoneTable tbody');
+    if(tbody.childElementCount !== (config.timezones.length + 1)) {
+      els('#timezoneTable .timezoneRow').forEach(e => e.remove());
+      config.timezones.forEach(tz => tbody.innerHTML += template.renderTemplate(timezoneAddRowTemplate, tz));
+      
+      //add listener on label input
+      els('#timezoneTable .timezoneRow .timezoneLabel').forEach(function(input) {
+        input.addEventListener('input', function(e) {
+          let code = e.target.dataset.timezoneName;
+          let label = e.target.value;
+          config.timezones.forEach(tz => { if(tz.code === code) tz.label = label;});
+          updateConfig();
+        })
+      });
+      
+      //add listener on remove button
+      els('#timezoneTable .timezoneRow .removeTimezone').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+          let code = e.target.dataset.timezoneName;
+          config.timezones = config.timezones.filter(tz => tz.code !== code);
+          updateConfig();
+          updateUi();
+        });
+      });
+      
+    }
   };
   
   let updateConfig = function() {
@@ -39,16 +76,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
     
     //this time zone is already selected, don't re-add it
     if(config.timezones.findIndex(tz => tz.code === tzName) < 0) {
-      ipc.send('debug-message', `Adding time zone ${tzName}`);
       config.timezones.push({code:tzName, label:''});
       updateConfig();
-    }
-    else {
-      ipc.send('debug-message', `Already have time zone ${tzName}`);
     }
     
     //reset selection back to empty option
     el('#addTimeZone').value = '';
+    updateUi();
   };
   
   //initialize listeners
@@ -74,11 +108,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     
     let selectBox = el('#addTimeZone');
     zones.forEach(function(tz) {
-      let opt = document.createElement('option');
-      let offset = now.tz(tz.code).format('ZZ');
-      opt.appendChild(document.createTextNode(`${tz.code} (UTC${offset})`));
-      opt.value = tz.code;
-      selectBox.appendChild(opt)
+      selectBox.innerHTML += template.renderTemplate(timezoneOptionTemplate, {code: tz.code, offset: now.tz(tz.code).format('ZZ')});
     });
     
   })();
