@@ -18,8 +18,6 @@ exports.offsetDisplay = 'utc';
 exports.timezones = [{code: 'UTC', label: 'UTC'}];
 
 exports.loadConfig = function() {
-  console.log('called loadConfig()');
-  
   let rawConfigJson = '';
   let rawConfig = {};
   
@@ -114,13 +112,8 @@ exports.saveConfig = function() {
   };
   
   let cleanConfigJson = JSON.stringify(cleanConfig, null, 2);
-  if(cleanConfigJson !== rawConfigJson) {
-    console.log('saving config');
+  if(cleanConfigJson !== rawConfigJson)
     fs.writeFileSync(configPath, cleanConfigJson);
-  }
-  else {
-    console.log('no changes to save');
-  }
 };
 
 exports.loadConfig();

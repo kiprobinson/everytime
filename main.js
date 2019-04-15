@@ -25,8 +25,6 @@ let settingsWin = null;
 
 TODO:
 
-Finish Settings dialog for adding/removing time zones and editing labels.
-Settings dialog - if opened, closed, and re-opened, get an error. (First window is destroyed I think. Try to make closing it just hide it.)
 Create MSI installer with https://stackoverflow.com/questions/36398955/electron-create-msi-installer-using-electron-builder
 
 */
@@ -84,36 +82,39 @@ function updateContextMenu() {
 	
 	template.push({type: 'separator'});
 	template.push({label: 'Settings...', click: showSettings})
-	template.push({label: 'Quit', role: 'quit' });
+	template.push({label: 'Quit', click: () => app.exit(0) });
 	tray.setContextMenu(Menu.buildFromTemplate(template));
 }
 
+function initSettingsWindow() {
+	//initialize settings window but don't display yet.
+	settingsWin = new BrowserWindow({
+		title: 'Everytime Settings',
+		width: 700,
+		height: 600,
+		"minWidth": 600,
+		"minHeight": 400,
+		show: false,
+		icon: path.join(__dirname, 'icons/app-icon.ico'),
+	});
+	settingsWin.setMenu(null);
+	
+	settingsWin.loadURL(url.format({
+		pathname: path.join(__dirname, 'settings.html'),
+		protocol: 'file:',
+		slashes: true
+	}));
+  
+  settingsWin.on('close', function(e) {
+	  //on close, just hide the window instead of closing
+  	e.preventDefault();
+  	settingsWin.hide();
+  });
+}
+
 function showSettings() {
-	if(settingsWin === null) {
-		settingsWin = new BrowserWindow({
-			width: 800,
-			height: 600,
-			title: 'Everytime Settings',
-			show: false,
-			//backgroundColor: '#2e2c29',
-			icon: path.join(__dirname, 'icons/app-icon.ico'),
-		});
-		settingsWin.setMenu(null);
-		
-		settingsWin.loadURL(url.format({
-			pathname: path.join(__dirname, 'settings.html'),
-			protocol: 'file:',
-			slashes: true
-		}));
-	  settingsWin.webContents.on('did-finish-load', () => {
-	    settingsWin.show();
-	    settingsWin.webContents.send('send-config', config);
-	  });
-	}
-  else {
-  	settingsWin.show();
-  	settingsWin.webContents.send('send-config', config);
-  }
+	settingsWin.webContents.send('send-config', config);
+	settingsWin.show();
 }
 
 app.on('ready', function(){
@@ -121,6 +122,7 @@ app.on('ready', function(){
 	tray = new Tray(iconPath);
 	
 	config.loadConfig();
+	initSettingsWindow();
 	
 	ipc.on('config-updated', function(e, _config) {
 		config.timeFormat = _config.timeFormat;
