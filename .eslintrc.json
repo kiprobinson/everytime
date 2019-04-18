@@ -15,8 +15,34 @@
     "no-empty": ["error", { "allowEmptyCatch": true }],
     "no-trailing-spaces": ["error", { "skipBlankLines": true, "ignoreComments": true }],
     "no-template-curly-in-string": "error",
-    "no-unused-vars": "off",
+    "no-unused-vars": "error",
     "no-useless-escape": "off",
+    "no-eval": "error",
+    "no-floating-decimal": "error",
+    "no-implied-eval": "error",
+    "no-invalid-this": "error",
+    "no-labels": "error",
+    "no-lone-blocks": "error",
+    "no-octal-escape": "error",
+    "no-return-assign": "error",
+    "no-self-compare": "error",
+    "no-sequences": "error",
+    "no-useless-return": "error",
+    "no-void": "error",
+    "no-with": "error",
+    "init-declarations": "error",
+    "no-shadow-restricted-names": "error",
+    "no-unused-expressions": "error",
+    "no-undef-init": "error",
+    "no-path-concat": "error",
+    "array-bracket-newline": ["error", "consistent"],
+    "array-bracket-spacing": "error",
+    "block-spacing": "error",
+    "array-element-newline": ["error", { "multiline": true }],
+    "no-use-before-define": ["error", { "functions": false, "classes": false }],
+    "wrap-iife": ["error", "inside"],
+    "strict": ["error", "global"],
+    "no-implicit-coercion": ["error", { "allow": ["!!"] }],
     "array-callback-return": "error",
     "block-scoped-var": "error",
     "consistent-return": "error",
@@ -27,6 +53,6 @@
     "curly": ["error", "multi-or-nest", "consistent"],
     "semi": "error"
     //see: https://eslint.org/docs/rules/
-    //stopped at no-empty-function
+    //stopped at block-spacing
   }
 }

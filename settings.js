@@ -12,7 +12,7 @@ const timezoneAddRowTemplate = `
   </tr>
 `;
 
-document.addEventListener("DOMContentLoaded", function(event) {
+document.addEventListener("DOMContentLoaded", function() {
   const ipc = require('electron').ipcRenderer;
   const moment = require('moment-timezone');
   const template = require('./template');
@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
   const el = (q) => document.querySelector(q);
   const els = (q) => document.querySelectorAll(q);
   
-  let updateUi = function() {
+  function updateUi() {
     el('#timeFormat_12').checked = (config.timeFormat === 12);
     el('#timeFormat_24').checked = (config.timeFormat === 24);
     
@@ -36,14 +36,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
     let tbody = el('#timezoneTable tbody');
     if(tbody.childElementCount !== (config.timezones.length + 1)) {
       els('#timezoneTable .timezoneRow').forEach(e => e.remove());
-      config.timezones.forEach(tz => tbody.innerHTML += template.renderTemplate(timezoneAddRowTemplate, tz));
+      
+      tbody.innerHTML += config.timezones.reduce(((s,tz) => s + template.renderTemplate(timezoneAddRowTemplate, tz)), '');
       
       //add listener on label input
       els('#timezoneTable .timezoneRow .timezoneLabel').forEach(function(input) {
         input.addEventListener('input', function(e) {
           let code = e.target.dataset.timezoneName;
           let label = e.target.value;
-          config.timezones.forEach(tz => { if(tz.code === code) tz.label = label;});
+          config.timezones.forEach(tz => { if(tz.code === code) tz.label = label; });
           updateConfig();
         });
       });
@@ -59,15 +60,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
       });
       
     }
-  };
+  }
   
-  let updateConfig = function() {
+  function updateConfig() {
     config.timeFormat = Number(el('input[name=timeFormat]:checked').value);
     config.offsetDisplay = el('input[name=offsetDisplay]:checked').value;
     ipc.send('config-updated', config);
-  };
+  }
   
-  let handleAddTimezone = function() {
+  function handleAddTimezone() {
     let tzName = el('#addTimeZone').value;
     
     //user selected the blank entry--do nothing
@@ -83,7 +84,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     //reset selection back to empty option
     el('#addTimeZone').value = '';
     updateUi();
-  };
+  }
   
   //initialize listeners
   els('input[name=timeFormat], input[name=offsetDisplay]').forEach(e => e.addEventListener('input', updateConfig));
@@ -97,8 +98,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
   //initialize the list of time zones
   (function() {
     let now = moment();
-    let janDate = moment((new Date()).setMonth(1));
-    let julDate = moment((new Date()).setMonth(7));
     
     let zones = moment.tz.names()
       .filter(tz => tz.match(/^(((Africa|America|Antarctica|Asia|Australia|Europe|Arctic|Atlantic|Indian|Pacific)\/.+)|(UTC))$/))

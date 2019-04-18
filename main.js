@@ -4,21 +4,16 @@
 //to generate exe:  npm run package
 
 const {app, Tray, Menu, BrowserWindow} = require('electron');
-const fs = require('fs');
 const ipc = require('electron').ipcMain;
 const moment = require('moment-timezone');
 const path = require('path');
 const url = require('url');
 const config = require('./config');
 
-
-
 const iconPath = path.join(__dirname, 'icons/tray-icon-invert.ico');
 
 
 let tray = null;
-let win = null;
-let ts = moment();
 let settingsWin = null;
 
 /*
@@ -120,7 +115,6 @@ function showSettings() {
 }
 
 app.on('ready', function(){
-  win = new BrowserWindow({show: false});
   tray = new Tray(iconPath);
   
   config.loadConfig();

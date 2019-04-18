@@ -9,9 +9,7 @@
  *                 This may contain nested objects.
  * @params prefix  Only used when recursing.
  */
-exports.renderTemplate = function(template, params, prefix) {
-  prefix = prefix || '';
-  
+exports.renderTemplate = function(template, params, prefix='') {
   Object.keys(params).forEach(function(k) {
     let v = params[k];
     if('object' === typeof v)
@@ -30,13 +28,13 @@ exports.renderTemplate = function(template, params, prefix) {
 /**
  * Escapes any characters which are special characters in a regular expression.
  */
-function regexQuote(str) {
-  return str.replace(/([\.\\\+\*\?\[\^\]\$\(\)\{\}\=\!\<\>\|\:\-])/g, '\\$1');
+function regexQuote(s) {
+  return s.replace(/([\.\\\+\*\?\[\^\]\$\(\)\{\}\=\!\<\>\|\:\-])/g, '\\$1');
 }
 
-function escapeHtml(str) {
-  if('string' !== typeof str)
-    str = String(str);
+function escapeHtml(s) {
+  if('string' !== typeof s)
+    s = String(s);
   
   const map = {
     '&': '&amp;',
@@ -46,5 +44,5 @@ function escapeHtml(str) {
     "'": '&#039;'
   };
 
-  return str.replace(/[&<>"']/g, m => map[m]);
+  return s.replace(/[&<>"']/g, m => map[m]);
 }

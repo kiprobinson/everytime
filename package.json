@@ -23,6 +23,7 @@
   "scripts": {
     "start": "electron .",
     "package": "electron-packager . everytime --platform=win32 --arch=x64 --overwrite --icon=icons/app-icon.ico --out=build",
-    "lint": "eslint \"**/*.js\" --format codeframe"
+    "lint": "eslint \"**/*.js\" --format codeframe",
+    "lintfix": "eslint \"**/*.js\" --format codeframe --fix"
   }
 }

@@ -1,10 +1,8 @@
 'use strict';
 
-const {app, Tray, Menu, BrowserWindow} = require('electron');
+const {app} = require('electron');
 const fs = require('fs');
 const moment = require('moment-timezone');
-const path = require('path');
-const url = require('url');
 
 const configPath = app.getPath('userData') + '/config.json';
 
