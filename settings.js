@@ -37,15 +37,18 @@ document.addEventListener("DOMContentLoaded", function() {
     if(tbody.childElementCount !== (config.timezones.length + 1)) {
       els('#timezoneTable .timezoneRow').forEach(e => e.remove());
       
-      tbody.innerHTML += config.timezones.reduce(((s,tz) => s + template.renderTemplate(timezoneAddRowTemplate, tz)), '');
+      tbody.innerHTML += config.timezones.reduce(((s, tz) => s + template.renderTemplate(timezoneAddRowTemplate, tz)), '');
       
       //add listener on label input
       els('#timezoneTable .timezoneRow .timezoneLabel').forEach(function(input) {
         input.addEventListener('input', function(e) {
           let code = e.target.dataset.timezoneName;
           let label = e.target.value;
-          config.timezones.forEach(tz => { if(tz.code === code) tz.label = label; });
-          updateConfig();
+          let idx = config.timezones.findIndex(tz => tz.code === code);
+          if(idx >= 0) {
+            config.timezones[idx].label = label;
+            updateConfig();
+          }
         });
       });
       
@@ -90,7 +93,7 @@ document.addEventListener("DOMContentLoaded", function() {
   els('input[name=timeFormat], input[name=offsetDisplay]').forEach(e => e.addEventListener('input', updateConfig));
   el('#addTimeZone').addEventListener('input', handleAddTimezone);
   
-  ipc.on('send-config', (event, _config) => {
+  ipc.on('send-config', function(event, _config) {
     config = _config;
     updateUi();
   });
@@ -103,7 +106,7 @@ document.addEventListener("DOMContentLoaded", function() {
       .filter(tz => tz.match(/^(((Africa|America|Antarctica|Asia|Australia|Europe|Arctic|Atlantic|Indian|Pacific)\/.+)|(UTC))$/))
       .map(tz => ({ code: tz, offset: now.tz(tz).utcOffset() }));
     
-    zones.sort((a,b) => (a.offset - b.offset) || a.code.localeCompare(b.code));
+    zones.sort((a, b) => (a.offset - b.offset) || a.code.localeCompare(b.code));
     
     let selectBox = el('#addTimeZone');
     zones.forEach(function(tz) {

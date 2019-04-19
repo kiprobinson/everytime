@@ -99,7 +99,7 @@ function initSettingsWindow() {
   settingsWin.loadURL(url.format({
     pathname: path.join(__dirname, 'settings.html'),
     protocol: 'file:',
-    slashes: true
+    slashes: true,
   }));
   
   settingsWin.on('close', function(e) {

@@ -41,7 +41,7 @@ function escapeHtml(s) {
     '<': '&lt;',
     '>': '&gt;',
     '"': '&quot;',
-    "'": '&#039;'
+    "'": '&#039;',
   };
 
   return s.replace(/[&<>"']/g, m => map[m]);

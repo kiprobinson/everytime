@@ -13,7 +13,7 @@
     "node": ">=10.0.0"
   },
   "dependencies": {
-    "moment-timezone": "^0.5.23"
+    "moment-timezone": "^0.5.25"
   },
   "devDependencies": {
     "electron": "^4.1.1",

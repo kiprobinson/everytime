@@ -38,6 +38,18 @@
     "array-bracket-newline": ["error", "consistent"],
     "array-bracket-spacing": "error",
     "block-spacing": "error",
+    "camelcase": "error",
+    "comma-spacing": "error",
+    "comma-style": "error",
+    "computed-property-spacing": "error",
+    "eol-last": "error",
+    "func-call-spacing": "error",
+    "implicit-arrow-linebreak": "error",
+    "arrow-body-style": ["error", "never"],
+    "func-names": ["error", "never"],
+    "function-paren-newline": ["error", "consistent"],
+    "comma-dangle": ["error", "always-multiline"],
+    "brace-style": ["error", "stroustrup", { "allowSingleLine": true }],
     "array-element-newline": ["error", { "multiline": true }],
     "no-use-before-define": ["error", { "functions": false, "classes": false }],
     "wrap-iife": ["error", "inside"],
@@ -53,6 +65,6 @@
     "curly": ["error", "multi-or-nest", "consistent"],
     "semi": "error"
     //see: https://eslint.org/docs/rules/
-    //stopped at block-spacing
+    //stopped at implicit-arrow-linebreak
   }
 }

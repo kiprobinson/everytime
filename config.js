@@ -42,7 +42,7 @@ function sanitizeConfig() {
   
   if(exports.timeFormat === 12 || exports.timeFormat === 24)
     cleanConfig.timeFormat = exports.timeFormat;
-  if(['utc','local','both','none'].indexOf(exports.offsetDisplay) >= 0)
+  if(['utc', 'local', 'both', 'none'].indexOf(exports.offsetDisplay) >= 0)
     cleanConfig.offsetDisplay = exports.offsetDisplay;
   
   if(Array.isArray(exports.timezones)) {
@@ -58,7 +58,7 @@ function sanitizeConfig() {
       
       let cleanTz = {
         code: zone.name,
-        label: (('string' === typeof rawTz.label) ? rawTz.label : '')
+        label: (('string' === typeof rawTz.label) ? rawTz.label : ''),
       };
       
       tzNames.add(cleanTz.name);
@@ -83,7 +83,7 @@ function sortTimeZones() {
   
   let avgOffsets = {};
   
-  exports.timezones.sort(function(a,b) {
+  exports.timezones.sort(function(a, b) {
     if(avgOffsets[a.code] === undefined)
       avgOffsets[a.code] = (janDate.tz(a.code).utcOffset() + julDate.tz(a.code).utcOffset())/2;
     if(avgOffsets[b.code] === undefined)
