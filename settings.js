@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", function() {
     
     //this time zone is already selected, don't re-add it
     if(config.timezones.findIndex(tz => tz.code === tzName) < 0) {
-      config.timezones.push({code:tzName, label:''});
+      config.timezones.push({code: tzName, label: ''});
       updateConfig();
     }
     
