@@ -121,6 +121,7 @@ app.on('ready', function() {
   initSettingsWindow();
   
   ipc.on('config-updated', function(e, _config) {
+    config.autoLaunch = _config.autoLaunch;
     config.timeFormat = _config.timeFormat;
     config.offsetDisplay = _config.offsetDisplay;
     config.timezones = _config.timezones;

@@ -24,6 +24,8 @@ document.addEventListener('DOMContentLoaded', function() {
   const els = (q => document.querySelectorAll(q));
   
   function updateUi() {
+    el('#autoLaunch').checked = (config.autoLaunch === true);
+    
     el('#timeFormat_12').checked = (config.timeFormat === 12);
     el('#timeFormat_24').checked = (config.timeFormat === 24);
     
@@ -65,6 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   
   function updateConfig() {
+    config.autoLaunch = el('#autoLaunch').checked;
     config.timeFormat = Number(el('input[name=timeFormat]:checked').value);
     config.offsetDisplay = el('input[name=offsetDisplay]:checked').value;
     ipc.send('config-updated', config);
@@ -89,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   
   //initialize listeners
-  els('input[name=timeFormat], input[name=offsetDisplay]').forEach(e => e.addEventListener('input', updateConfig));
+  els('#autoLaunch, input[name=timeFormat], input[name=offsetDisplay]').forEach(e => e.addEventListener('input', updateConfig));
   el('#addTimeZone').addEventListener('input', handleAddTimezone);
   
   ipc.on('send-config', function(event, _config) {

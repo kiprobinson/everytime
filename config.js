@@ -3,14 +3,20 @@
 const {app} = require('electron');
 const fs = require('fs');
 const moment = require('moment-timezone');
+const AutoLaunch = require('auto-launch');
 
 const configPath = app.getPath('userData') + '/config.json';
+const autoLaunch = process.execPath.match(/node_modules/) ? null : new AutoLaunch({name: 'Everytime', path: process.execPath});
+console.warn('process.execPath' + process.execPath);
+if(autoLaunch === null)
+  console.warn('AutoLaunch option will be ignored when running as a developer');
 
 const validTimezones = new Set(
   moment.tz.names()
     .filter(tz => tz.match(/^(((Africa|America|Antarctica|Asia|Australia|Europe|Arctic|Atlantic|Indian|Pacific)\/.+)|(UTC))$/))
 );
 
+exports.autoLaunch = false;
 exports.timeFormat = 12;
 exports.offsetDisplay = 'utc';
 exports.timezones = [{code: 'UTC', label: 'UTC'}];
@@ -25,7 +31,7 @@ exports.loadConfig = function() {
   }
   catch(e) {} //don't care
   
-  
+  exports.autoLaunch = rawConfig.autoLaunch;
   exports.timeFormat = rawConfig.timeFormat;
   exports.offsetDisplay = rawConfig.offsetDisplay;
   exports.timezones = rawConfig.timezones;
@@ -35,11 +41,14 @@ exports.loadConfig = function() {
 
 function sanitizeConfig() {
   let cleanConfig = {
+    autoLaunch: false,
     timeFormat: 12, //either 12 or 24
     offsetDisplay: 'utc', //one of: utc, local, both
     timezones: [],
   };
   
+  if(exports.autoLaunch === true)
+    cleanConfig.autoLaunch = true;
   if(exports.timeFormat === 12 || exports.timeFormat === 24)
     cleanConfig.timeFormat = exports.timeFormat;
   if(['utc', 'local', 'both', 'none'].indexOf(exports.offsetDisplay) >= 0)
@@ -70,6 +79,7 @@ function sanitizeConfig() {
   if(cleanConfig.timezones.length === 0)
     cleanConfig.timezones.push({code: 'UTC', label: 'UTC'});
   
+  exports.autoLaunch = cleanConfig.autoLaunch;
   exports.timeFormat = cleanConfig.timeFormat;
   exports.offsetDisplay = cleanConfig.offsetDisplay;
   exports.timezones = cleanConfig.timezones;
@@ -104,6 +114,7 @@ exports.saveConfig = function() {
   catch(e) {} //don't care
   
   let cleanConfig = {
+    autoLaunch: exports.autoLaunch,
     timeFormat: exports.timeFormat,
     offsetDisplay: exports.offsetDisplay,
     timezones: exports.timezones,
@@ -112,6 +123,13 @@ exports.saveConfig = function() {
   let cleanConfigJson = JSON.stringify(cleanConfig, null, 2);
   if(cleanConfigJson !== rawConfigJson)
     fs.writeFileSync(configPath, cleanConfigJson);
+  
+  if(autoLaunch !== null) {
+    if(exports.autoLaunch)
+      autoLaunch.enable();
+    else
+      autoLaunch.disable();
+  }
 };
 
 exports.loadConfig();
