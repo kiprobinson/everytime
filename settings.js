@@ -12,7 +12,7 @@ const timezoneAddRowTemplate = `
   </tr>
 `;
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener('DOMContentLoaded', function() {
   const ipc = require('electron').ipcRenderer;
   const moment = require('moment-timezone');
   const template = require('./template');
@@ -20,8 +20,8 @@ document.addEventListener("DOMContentLoaded", function() {
   let config = null;
   
   //shortcuts...
-  const el = (q) => document.querySelector(q);
-  const els = (q) => document.querySelectorAll(q);
+  const el = (q => document.querySelector(q));
+  const els = (q => document.querySelectorAll(q));
   
   function updateUi() {
     el('#timeFormat_12').checked = (config.timeFormat === 12);
@@ -61,7 +61,6 @@ document.addEventListener("DOMContentLoaded", function() {
           updateUi();
         });
       });
-      
     }
   }
   
@@ -104,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function() {
     
     let zones = moment.tz.names()
       .filter(tz => tz.match(/^(((Africa|America|Antarctica|Asia|Australia|Europe|Arctic|Atlantic|Indian|Pacific)\/.+)|(UTC))$/))
-      .map(tz => ({ code: tz, offset: now.tz(tz).utcOffset() }));
+      .map(tz => ({code: tz, offset: now.tz(tz).utcOffset()}));
     
     zones.sort((a, b) => (a.offset - b.offset) || a.code.localeCompare(b.code));
     
@@ -112,6 +111,5 @@ document.addEventListener("DOMContentLoaded", function() {
     zones.forEach(function(tz) {
       selectBox.innerHTML += template.renderTemplate(timezoneOptionTemplate, {code: tz.code, offset: now.tz(tz.code).format('ZZ')});
     });
-    
   })();
 });

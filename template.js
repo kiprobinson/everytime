@@ -1,7 +1,6 @@
 'use strict';
 
 
-
 /**
  * A very very simple templating engine. Mimics basic funcionality of Handlebars templates.
  * @param template Template content
@@ -19,7 +18,7 @@ exports.renderTemplate = function(template, params, prefix='') {
   });
   
   //if this was not recursive call, clean up any unused template strings
-  if(prefix==='')
+  if(prefix === '')
     template = template.replace(/\{\{(.*?)\}\}/g, '');//'MISSING: [$1]');
   
   return template;

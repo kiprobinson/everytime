@@ -51,7 +51,7 @@ function updateContextMenu() {
   
   //start with i=-1, which indicates local time zone which is always drawn at the top with a separator.
   for(let i = -1; i < config.timezones.length; i++) {
-    let tz = (i < 0 ? { code: localTz, label: 'Local Time' } : config.timezones[i]);
+    let tz = (i < 0 ? {code: localTz, label: 'Local Time'} : config.timezones[i]);
     let offsetMins = ts.tz(tz.code).utcOffset();
     let tzDate = Number(ts.tz(tz.code).format('YYYYMMDD'));
     let diffDay = (tzDate < localDate ? ' (yesterday)' : (tzDate > localDate ? ' (tomorrow)' : ''));
@@ -79,7 +79,7 @@ function updateContextMenu() {
   
   template.push({type: 'separator'});
   template.push({label: 'Settings...', click: showSettings});
-  template.push({label: 'Quit', click: () => app.exit(0) });
+  template.push({label: 'Quit', click: () => app.exit(0)});
   tray.setContextMenu(Menu.buildFromTemplate(template));
 }
 
@@ -114,7 +114,7 @@ function showSettings() {
   settingsWin.show();
 }
 
-app.on('ready', function(){
+app.on('ready', function() {
   tray = new Tray(iconPath);
   
   config.loadConfig();
@@ -136,5 +136,4 @@ app.on('ready', function(){
     setTimeout(updateTimer, 60000 - (Date.now() % 60000));
   };
   updateTimer();
-  
 });
