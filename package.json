@@ -1,6 +1,6 @@
 {
-  "name": "everytime",
-  "version": "0.0.1",
+  "name": "Everytime",
+  "version": "1.0.0",
   "author": {
     "name": "Kip Robinson",
     "url": "https://ampersand.space"
@@ -23,7 +23,7 @@
   },
   "scripts": {
     "start": "electron .",
-    "package": "electron-packager . everytime --platform=win32 --arch=x64 --overwrite --icon=icons/app-icon.ico --out=build",
+    "package": "electron-packager . Everytime --platform=win32 --arch=x64 --overwrite --icon=icons/app-icon.ico --out=build && electron-packager . Everytime --platform=win32 --arch=ia32 --overwrite --icon=icons/app-icon.ico --out=build",
     "lint": "eslint \"**/*.js\" --format codeframe",
     "lintfix": "eslint \"**/*.js\" --format codeframe --fix"
   }
