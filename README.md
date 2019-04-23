@@ -1,6 +1,8 @@
 # Everytime
 
-Everytime is an app that runs in the system tray and displays the current time local time in several time zones.
+***Time zones are hard. Everytime makes them easy!***
+
+Everytime runs in the system tray and displays the current time local time in several time zones.
 
 ![example screencap](https://raw.githubusercontent.com/kiprobinson/everytime/master/screencap.jpg)
 
