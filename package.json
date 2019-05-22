@@ -1,6 +1,6 @@
 {
   "name": "Everytime",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": {
     "name": "Kip Robinson",
     "url": "https://ampersand.space"
@@ -17,7 +17,7 @@
     "moment-timezone": "^0.5.25"
   },
   "devDependencies": {
-    "electron": "^4.1.1",
+    "electron": "^4.2.2",
     "electron-packager": "^13.1.1",
     "eslint": "^5.16.0"
   },
