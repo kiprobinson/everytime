@@ -7,7 +7,6 @@ const AutoLaunch = require('auto-launch');
 
 const configPath = app.getPath('userData') + '/config.json';
 const autoLaunch = process.execPath.match(/node_modules/) ? null : new AutoLaunch({name: 'Everytime', path: process.execPath});
-console.warn('process.execPath' + process.execPath);
 if(autoLaunch === null)
   console.warn('AutoLaunch option will be ignored when running as a developer');
 

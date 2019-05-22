@@ -15,12 +15,12 @@ const iconPath = path.join(__dirname, 'icons/tray-icon-invert.ico');
 
 let tray = null;
 let settingsWin = null;
+let menuVisible = false;
 
 /*
 
 TODO:
 
-JS Linting
 Settings dialog- make selection for new timezone a typeahead.
 Create MSI installer with https://stackoverflow.com/questions/36398955/electron-create-msi-installer-using-electron-builder
 
@@ -37,6 +37,10 @@ function formatOffsetMins(offsetMins) {
 }
 
 function updateContextMenu() {
+  //don't update the menu item while it is visible. try again in 5 seconds.
+  if(menuVisible)
+    return;
+  
   let ts = moment();
   
   const timeFormat = (config.timeFormat === 24 ? 'HH:mm' : 'h:mm A');
@@ -80,7 +84,11 @@ function updateContextMenu() {
   template.push({type: 'separator'});
   template.push({label: 'Settings...', click: showSettings});
   template.push({label: 'Quit', click: () => app.exit(0)});
-  tray.setContextMenu(Menu.buildFromTemplate(template));
+  
+  let menu = Menu.buildFromTemplate(template);
+  menu.on('menu-will-show', function() { menuVisible = true; });
+  menu.on('menu-will-close', function() { menuVisible = false; updateContextMenu(); });
+  tray.setContextMenu(menu);
 }
 
 function initSettingsWindow() {
