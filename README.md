@@ -26,9 +26,9 @@ Right-click on the Everytime logo and select "Settings...". The application curr
 
 * **Start on login**: If this is enabled, the application will launch as soon as you log in to the operating system. *Note: This option only works if you are running a compiled executable. If you are running from the command line, this option will have no effect.*
 
-* **Time format**: You can choose to display times in 24-hour format (01:37) or 12-hour format (1:37 PM).
+* **Time format**: You can choose to display times in 24-hour format (13:37) or 12-hour format (1:37 PM).
 
-* **Offset display**: Beside each time zone, you can choose whether to display that timezones offset against your local timezone or UTC, or you can choose both, or you can choose not to display the offset at all. For example, if you are in America/New_York, and you show times in Europe/Helsinki, the Helsinki time offset can be shown as "(UTC+0300)" or as "(Local+0700)".
+* **Offset display**: Beside each time zone, you can choose whether to display that time zone's offset against your local time zone or UTC, or you can choose both, or you can choose not to display the offset at all. For example, if you are in America/New_York, and you show times in Europe/Helsinki, the Helsinki time offset can be shown as "(UTC+0300)" or as "(Local+0700)".
 
 * **Add/remove time zones**: This section lists the time zones you have selected to show (by default, this only includes UTC). You can add other time zones to this list.
 
