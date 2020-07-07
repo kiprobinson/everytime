@@ -17,7 +17,7 @@
     "moment-timezone": "^0.5.25"
   },
   "devDependencies": {
-    "electron": "^4.2.2",
+    "electron": "^7.2.4",
     "electron-packager": "^13.1.1",
     "eslint": "^5.16.0"
   },
