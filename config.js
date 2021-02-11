@@ -21,12 +21,10 @@ exports.offsetDisplay = 'utc';
 exports.timezones = [{code: 'UTC', label: 'UTC'}];
 
 exports.loadConfig = function() {
-  let rawConfigJson = '';
   let rawConfig = {};
   
   try {
-    rawConfigJson = fs.readFileSync(configPath).toString();
-    rawConfig = JSON.parse(rawConfigJson);
+    rawConfig = JSON.parse(fs.readFileSync(configPath).toString());
   }
   catch(e) {} //don't care
   
@@ -37,6 +35,15 @@ exports.loadConfig = function() {
   
   exports.saveConfig();
 };
+
+exports.serialize = function() {
+  return {
+    autoLaunch: exports.autoLaunch,
+    timeFormat: exports.timeFormat,
+    offsetDisplay: exports.offsetDisplay,
+    timezones: exports.timezones,
+  };
+}
 
 function sanitizeConfig() {
   let cleanConfig = {

@@ -101,6 +101,9 @@ function initSettingsWindow() {
     minHeight: 400,
     show: false,
     icon: path.join(__dirname, 'icons/app-icon.ico'),
+    webPreferences: {
+      nodeIntegration: true
+    },
   });
   settingsWin.setMenu(null);
   
@@ -118,7 +121,7 @@ function initSettingsWindow() {
 }
 
 function showSettings() {
-  settingsWin.webContents.send('send-config', config);
+  settingsWin.webContents.send('send-config', config.serialize());
   settingsWin.show();
 }
 
