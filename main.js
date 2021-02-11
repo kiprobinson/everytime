@@ -102,7 +102,8 @@ function initSettingsWindow() {
     show: false,
     icon: path.join(__dirname, 'icons/app-icon.ico'),
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      contextIsolation: false,
     },
   });
   settingsWin.setMenu(null);
