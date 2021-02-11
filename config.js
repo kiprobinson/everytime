@@ -12,7 +12,7 @@ if(autoLaunch === null)
 
 const validTimezones = new Set(
   moment.tz.names()
-    .filter(tz => tz.match(/^(((Africa|America|Antarctica|Asia|Australia|Europe|Arctic|Atlantic|Indian|Pacific)\/.+)|(UTC))$/))
+    .filter(tz => tz.match(/^(((Africa|America|Antarctica|Asia|Australia|Europe|Arctic|Atlantic|Indian|Pacific)\/.+)|(UTC))$/)),
 );
 
 exports.autoLaunch = false;
@@ -37,13 +37,13 @@ exports.loadConfig = function() {
 };
 
 exports.serialize = function() {
-  return {
+  return{
     autoLaunch: exports.autoLaunch,
     timeFormat: exports.timeFormat,
     offsetDisplay: exports.offsetDisplay,
     timezones: exports.timezones,
   };
-}
+};
 
 function sanitizeConfig() {
   let cleanConfig = {
