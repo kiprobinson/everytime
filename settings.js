@@ -1,5 +1,9 @@
 'use strict';
 
+const ipc = require('electron').ipcRenderer;
+const moment = require('moment-timezone');
+const template = require('./template');
+
 const timezoneOptionTemplate = `
   <option value="{{code}}">{{code}} (UTC{{offset}})</option>
 `;
@@ -13,10 +17,6 @@ const timezoneAddRowTemplate = `
 `;
 
 document.addEventListener('DOMContentLoaded', function() {
-  const ipc = require('electron').ipcRenderer;
-  const moment = require('moment-timezone');
-  const template = require('./template');
-  
   let config = null;
   
   //shortcuts...
