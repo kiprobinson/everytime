@@ -136,6 +136,7 @@ app.on('ready', function() {
     config.autoLaunch = _config.autoLaunch;
     config.timeFormat = _config.timeFormat;
     config.offsetDisplay = _config.offsetDisplay;
+    config.firstDayOfWeek = _config.firstDayOfWeek;
     config.timezones = _config.timezones;
     config.saveConfig();
     updateContextMenu();

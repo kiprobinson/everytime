@@ -18,6 +18,7 @@ const validTimezones = new Set(
 exports.autoLaunch = false;
 exports.timeFormat = 12;
 exports.offsetDisplay = 'utc';
+exports.firstDayOfWeek = 0;
 exports.timezones = [{code: 'UTC', label: 'UTC'}];
 
 exports.loadConfig = function() {
@@ -31,6 +32,7 @@ exports.loadConfig = function() {
   exports.autoLaunch = rawConfig.autoLaunch;
   exports.timeFormat = rawConfig.timeFormat;
   exports.offsetDisplay = rawConfig.offsetDisplay;
+  exports.firstDayOfWeek = rawConfig.firstDayOfWeek;
   exports.timezones = rawConfig.timezones;
   
   exports.saveConfig();
@@ -41,6 +43,7 @@ exports.serialize = function() {
     autoLaunch: exports.autoLaunch,
     timeFormat: exports.timeFormat,
     offsetDisplay: exports.offsetDisplay,
+    firstDayOfWeek: exports.firstDayOfWeek,
     timezones: exports.timezones,
   };
 };
@@ -50,6 +53,7 @@ function sanitizeConfig() {
     autoLaunch: false,
     timeFormat: 12, //either 12 or 24
     offsetDisplay: 'utc', //one of: utc, local, both
+    firstDayOfWeek: 0, //either 0 (sunday) or 1 (monday)
     timezones: [],
   };
   
@@ -59,6 +63,8 @@ function sanitizeConfig() {
     cleanConfig.timeFormat = exports.timeFormat;
   if(['utc', 'local', 'both', 'none'].indexOf(exports.offsetDisplay) >= 0)
     cleanConfig.offsetDisplay = exports.offsetDisplay;
+  if(exports.firstDayOfWeek === 0 || exports.firstDayOfWeek === 1)
+    cleanConfig.firstDayOfWeek = exports.firstDayOfWeek;
   
   if(Array.isArray(exports.timezones)) {
     let tzNames = new Set();
@@ -88,6 +94,7 @@ function sanitizeConfig() {
   exports.autoLaunch = cleanConfig.autoLaunch;
   exports.timeFormat = cleanConfig.timeFormat;
   exports.offsetDisplay = cleanConfig.offsetDisplay;
+  exports.firstDayOfWeek = cleanConfig.firstDayOfWeek;
   exports.timezones = cleanConfig.timezones;
   
   sortTimeZones();
@@ -123,6 +130,7 @@ exports.saveConfig = function() {
     autoLaunch: exports.autoLaunch,
     timeFormat: exports.timeFormat,
     offsetDisplay: exports.offsetDisplay,
+    firstDayOfWeek: exports.firstDayOfWeek,
     timezones: exports.timezones,
   };
   
