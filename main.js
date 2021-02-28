@@ -9,12 +9,14 @@ const moment = require('moment-timezone');
 const path = require('path');
 const url = require('url');
 const config = require('./config');
+const {utils} = require('./utils');
 
 const iconPath = path.join(__dirname, 'icons/tray-icon-invert.ico');
 
 
 let tray = null;
 let settingsWin = null;
+let planningWin = null;
 let menuVisible = false;
 
 /*
@@ -27,61 +29,27 @@ Create MSI installer with https://stackoverflow.com/questions/36398955/electron-
 */
 
 
-function formatOffsetMins(offsetMins) {
-  let sign = (offsetMins < 0 ? '-' : '+');
-  let hrs = Math.floor(Math.abs(offsetMins) / 60);
-  hrs = (hrs < 10 ? '0' : '') + String(hrs);
-  let mins = Math.abs(offsetMins) % 60;
-  mins = (mins < 10 ? '0' : '') + String(mins);
-  return sign + hrs + mins;
-}
-
 function updateContextMenu() {
   //don't update the menu item while it is visible. try again in 5 seconds.
   if(menuVisible)
     return;
   
-  let ts = moment();
-  
-  const timeFormat = (config.timeFormat === 24 ? 'HH:mm' : 'h:mm A');
-  const showUtcOffset = (config.offsetDisplay === 'both' || config.offsetDisplay === 'utc');
-  const showLocalOffset = (config.offsetDisplay === 'both' || config.offsetDisplay === 'local');
-  
-  let template = [];
-  
-  let localTz = moment.tz.guess(true);
-  let localDate = Number(ts.tz(localTz).format('YYYYMMDD'));
-  let localOffsetMins = ts.tz(localTz).utcOffset();
+  const ts = moment();
+  const template = [];
+  const localTz = moment.tz.guess(true);
   
   //start with i=-1, which indicates local time zone which is always drawn at the top with a separator.
   for(let i = -1; i < config.timezones.length; i++) {
-    let tz = (i < 0 ? {code: localTz, label: 'Local Time'} : config.timezones[i]);
-    let offsetMins = ts.tz(tz.code).utcOffset();
-    let tzDate = Number(ts.tz(tz.code).format('YYYYMMDD'));
-    let diffDay = (tzDate < localDate ? ' (yesterday)' : (tzDate > localDate ? ' (tomorrow)' : ''));
-    let tzTime = ts.tz(tz.code).format(timeFormat);
-    
-    let offsetVsUtc = formatOffsetMins(offsetMins);
-    let offsetVsLocal = formatOffsetMins(offsetMins - localOffsetMins);
-    
-    let offsetDisplays = [];
-    if(showUtcOffset)
-      offsetDisplays.push(`UTC${offsetVsUtc}`);
-    if(showLocalOffset)
-      offsetDisplays.push(`Local${offsetVsLocal}`);
-    
-    let offsetDisplay = offsetDisplays.join(', ');
-    if(offsetDisplay !== '')
-      offsetDisplay = ` (${offsetDisplay})`;
-    
-    let labelDisplay = (tz.label === '' ? tz.code : tz.label);
-    
-    template.push({label: `${labelDisplay}${offsetDisplay}`, sublabel: `${tzTime}${diffDay}`});
+    const tz = (i < 0 ? {code: localTz, label: 'Local Time'} : config.timezones[i]);
+    const formatted = utils.formatTimestamp(ts, tz, config);
+    const diffDay = (formatted.dayDiff < 0 ? ' (yesterday)' : (formatted.dayDiff > 0 ? ' (tomorrow)' : ''));
+    template.push({label: formatted.label, sublabel: `${formatted.tzTime}${diffDay}`});
     if(i < 0)
       template.push({type: 'separator'});
   }
   
   template.push({type: 'separator'});
+  template.push({label: 'Planning...', click: showPlanning});
   template.push({label: 'Settings...', click: showSettings});
   template.push({label: 'Quit', click: () => app.exit(0)});
   
@@ -126,11 +94,53 @@ function showSettings() {
   settingsWin.show();
 }
 
+function initPlanningWindow() {
+  //initialize settings window but don't display yet.
+  planningWin = new BrowserWindow({
+    title: 'Everytime Planning',
+    width: 700,
+    height: 600,
+    minWidth: 600,
+    minHeight: 400,
+    show: false,
+    icon: path.join(__dirname, 'icons/app-icon.ico'),
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+    },
+  });
+  planningWin.setMenu(null);
+  
+  planningWin.loadURL(url.format({
+    pathname: path.join(__dirname, 'planning.html'),
+    protocol: 'file:',
+    slashes: true,
+  }));
+  
+  planningWin.on('close', function(e) {
+    //on close, just hide the window instead of closing
+    e.preventDefault();
+    planningWin.hide();
+  });
+}
+
+function showPlanning() {
+  if(planningWin.isVisible()) {
+    planningWin.focus();
+  }
+  else {
+    planningWin.webContents.send('send-config', config.serialize());
+    planningWin.webContents.send('before-show');
+    planningWin.show();
+  }
+}
+
 app.on('ready', function() {
   tray = new Tray(iconPath);
   
   config.loadConfig();
   initSettingsWindow();
+  initPlanningWindow();
   
   ipc.on('config-updated', function(e, _config) {
     config.autoLaunch = _config.autoLaunch;
@@ -140,7 +150,10 @@ app.on('ready', function() {
     config.timezones = _config.timezones;
     config.saveConfig();
     updateContextMenu();
+    planningWin.webContents.send('send-config', config.serialize());
   });
+  
+  tray.on('double-click', showPlanning);
   
   ipc.on('debug-message', (e, m) => console.log(m));
   

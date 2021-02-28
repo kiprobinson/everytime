@@ -3,6 +3,7 @@
 const ipc = require('electron').ipcRenderer;
 const moment = require('moment-timezone');
 const template = require('./template');
+const {utils} = require('./utils');
 
 const timezoneOptionTemplate = `
   <option value="{{code}}">{{code}} (UTC{{offset}})</option>
@@ -106,17 +107,10 @@ document.addEventListener('DOMContentLoaded', function() {
   
   //initialize the list of time zones
   (function() {
-    let now = moment();
+    const now = moment();
+    const zones = utils.listAllZones();
     
-    let zones = moment.tz.names()
-      .filter(tz => tz.match(/^(((Africa|America|Antarctica|Asia|Australia|Europe|Arctic|Atlantic|Indian|Pacific)\/.+)|(UTC))$/))
-      .map(tz => ({code: tz, offset: now.tz(tz).utcOffset()}));
-    
-    zones.sort((a, b) => (a.offset - b.offset) || a.code.localeCompare(b.code));
-    
-    let selectBox = el('#addTimeZone');
-    zones.forEach(function(tz) {
-      selectBox.innerHTML += template.renderTemplate(timezoneOptionTemplate, {code: tz.code, offset: now.tz(tz.code).format('ZZ')});
-    });
+    const selectBox = el('#addTimeZone');
+    zones.forEach(tz => selectBox.innerHTML += template.renderTemplate(timezoneOptionTemplate, {code: tz.code, offset: now.tz(tz.code).format('ZZ')}));
   })();
 });

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel='stylesheet' href='./style.css'>
+  <script src="./planning.js"></script>
+</head>
+<body>
+  <div class="optionRow">
+    <div class="optionLabel">Date</div>
+    <div class="optionValues">
+      <input type="date" id="planning_date" />
+    </div>
+  </div>
+  
+  <div class="optionRow">
+    <div class="optionLabel">Time</div>
+    <div class="optionValues">
+      <input type="time" id="planning_time" />
+    </div>
+  </div>
+  
+  <div class="optionRow">
+    <div class="optionLabel">Time zone</div>
+    <div class="optionValues">
+      <select id="planning_timezone">
+        <option selected></option>
+        <!-- <option value="America/New_York">America/New_York (UTC-0400)</option> -->
+      </select>
+    </div>
+  </div>
+  
+  <hr/>
+  
+  <div id="planning_results"></div>
+</body>
+</html>
