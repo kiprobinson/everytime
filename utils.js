@@ -1,6 +1,5 @@
 'use strict';
 
-const ipc = require('electron').ipcRenderer;
 const moment = require('moment-timezone');
 
 const utils = {
@@ -62,7 +61,7 @@ const utils = {
     
     zones.sort((a, b) => (a.offset - b.offset) || a.code.localeCompare(b.code));
     return zones;
-  }
+  },
 };
 
 exports.utils = utils;

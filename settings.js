@@ -107,6 +107,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const zones = utils.listAllZones();
     
     const selectBox = el('#addTimeZone');
-    zones.forEach(tz => selectBox.innerHTML += template.renderTemplate(timezoneOptionTemplate, {code: tz.code, offset: now.tz(tz.code).format('ZZ')}));
+    zones.forEach(function(tz) {
+      selectBox.innerHTML += template.renderTemplate(timezoneOptionTemplate, {code: tz.code, offset: now.tz(tz.code).format('ZZ')});
+    });
   })();
 });

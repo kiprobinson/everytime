@@ -45,12 +45,12 @@ document.addEventListener('DOMContentLoaded', function() {
     updateResults();
   });
   
-  ipc.on('before-show', function(event, _config) {
+  ipc.on('before-show', function() {
     //set date and time to now
     el('#planning_date').value = moment().format('YYYY-MM-DD');
     el('#planning_time').value = moment().format('HH:mm');
     el('#planning_timezone').value = moment.tz.guess(true);
-    updateResults()
+    updateResults();
   });
   
   //initialize the list of time zones
@@ -59,6 +59,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const zones = utils.listAllZones();
     
     const selectBox = el('#planning_timezone');
-    zones.forEach(tz => selectBox.innerHTML += template.renderTemplate(timezoneOptionTemplate, {code: tz.code, offset: now.tz(tz.code).format('ZZ')}));
+    zones.forEach(function(tz) {
+      selectBox.innerHTML += template.renderTemplate(timezoneOptionTemplate, {code: tz.code, offset: now.tz(tz.code).format('ZZ')});
+    });
   })();
 });

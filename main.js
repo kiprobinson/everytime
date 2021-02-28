@@ -128,7 +128,7 @@ function showPlanning() {
   if(planningWin.isVisible()) {
     planningWin.focus();
   }
-  else {
+  else{
     planningWin.webContents.send('send-config', config.serialize());
     planningWin.webContents.send('before-show');
     planningWin.show();
