@@ -35,9 +35,6 @@ document.addEventListener('DOMContentLoaded', function() {
     el('#offsetDisplay_both').checked  = (config.offsetDisplay === 'both');
     el('#offsetDisplay_none').checked  = (config.offsetDisplay === 'none');
     
-    el('#firstDayOfWeek_0').checked = (config.firstDayOfWeek === 0);
-    el('#firstDayOfWeek_1').checked = (config.firstDayOfWeek === 1);
-    
     //draw timezone table only if number of rows has changed
     let tbody = el('#timezoneTable tbody');
     if(tbody.childElementCount !== (config.timezones.length + 1)) {
@@ -74,7 +71,6 @@ document.addEventListener('DOMContentLoaded', function() {
     config.autoLaunch = el('#autoLaunch').checked;
     config.timeFormat = Number(el('input[name=timeFormat]:checked').value);
     config.offsetDisplay = el('input[name=offsetDisplay]:checked').value;
-    config.firstDayOfWeek = Number(el('input[name=firstDayOfWeek]:checked').value);
     ipc.send('config-updated', config);
   }
   
@@ -97,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   
   //initialize listeners
-  els('#autoLaunch, input[name=timeFormat], input[name=offsetDisplay], input[name=firstDayOfWeek]').forEach(e => e.addEventListener('input', updateConfig));
+  els('#autoLaunch, input[name=timeFormat], input[name=offsetDisplay]').forEach(e => e.addEventListener('input', updateConfig));
   el('#addTimeZone').addEventListener('input', handleAddTimezone);
   
   ipc.on('send-config', function(event, _config) {
