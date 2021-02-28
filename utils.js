@@ -3,6 +3,10 @@
 const moment = require('moment-timezone');
 
 const utils = {
+  /**
+   * Formats offset minutes like "+0530", "-0800", etc.
+   * @param offsetMins {Number}
+   */
   formatOffsetMins(offsetMins) {
     let sign = (offsetMins < 0 ? '-' : '+');
     let hrs = Math.floor(Math.abs(offsetMins) / 60).toString().padStart(2, '0');
@@ -11,9 +15,18 @@ const utils = {
   },
   
   
-  //ts: moment instance
-  //tz: {code:string, label:string}
-  //config
+  /**
+   * Formats a timestamp in the given time zone.
+   * @param ts A moment instance
+   * @param tz Name of the time zone to display the timestamp in.
+   * @param config Config object
+   * 
+   * @returns {
+   *   label: string    The label for this time zone, configured as per configs
+   *   tzTime: string   The time in the given timezone, formatted as per configs
+   *   dayDiff: -1|0|1  If the formatted timestamp is in a different day than in local time zone, this indicates how many days different it is.
+   * }
+   */
   formatTimestamp(ts, tz, config) {
     const ret = {
       label: '',
