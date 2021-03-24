@@ -34,15 +34,15 @@ function updateContextMenu() {
   if(menuVisible)
     return;
   
-  const ts = moment();
-  const template = [];
   const localTz = moment.tz.guess(true);
+  const ts = moment.tz(localTz);
+  const template = [];
   
   //start with i=-1, which indicates local time zone which is always drawn at the top with a separator.
   for(let i = -1; i < config.timezones.length; i++) {
     const tz = (i < 0 ? {code: localTz, label: 'Local Time'} : config.timezones[i]);
     const formatted = utils.formatTimestamp(ts, tz, config);
-    const diffDay = (formatted.dayDiff < 0 ? ' (yesterday)' : (formatted.dayDiff > 0 ? ' (tomorrow)' : ''));
+    const diffDay = formatDayDiff(formatted.dayDiff);
     template.push({label: formatted.label, sublabel: `${formatted.tzTime}${diffDay}`});
     if(i < 0)
       template.push({type: 'separator'});
@@ -57,6 +57,20 @@ function updateContextMenu() {
   menu.on('menu-will-show', function() { menuVisible = true; });
   menu.on('menu-will-close', function() { menuVisible = false; updateContextMenu(); });
   tray.setContextMenu(menu);
+}
+
+function formatDayDiff(diff) {
+  if(diff === 0)
+    return '';
+  if(diff === -1)
+    return ' (yesterday)';
+  if(diff === 1)
+    return ' (tomorrow)';
+  
+  const sign = diff < 0 ? '-' : '+';
+  const num = Math.abs(diff);
+  
+  return ` (${sign}${num} days)`;
 }
 
 function initSettingsWindow() {

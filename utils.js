@@ -24,14 +24,14 @@ const utils = {
    * @returns {
    *   label: string    The label for this time zone, configured as per configs
    *   tzTime: string   The time in the given timezone, formatted as per configs
-   *   dayDiff: -1|0|1  If the formatted timestamp is in a different day than in local time zone, this indicates how many days different it is.
+   *   dayDiff: number  If the formatted timestamp is in a different day than in local time zone, this indicates how many days different it is.
    * }
    */
   formatTimestamp(ts, tz, config) {
     const ret = {
       label: '',
       tzTime: '', //time in the timezone
-      dayDiff: 0, //-1, 0, or +1, indicating day difference from local
+      dayDiff: 0, //number of days different from local indicating day difference from local
     };
     
     const timeFormat = (config.timeFormat === 24 ? 'HH:mm' : 'h:mm A');
@@ -40,15 +40,14 @@ const utils = {
     
     const localTz = ts.tz() || moment.tz.guess(true);
     const localTs = ts.clone().tz(localTz);
-    const localDate = Number(localTs.format('YYYYMMDD'));
+    const localDate = localTs.format('YYYYMMDD');
     const localOffsetMins = localTs.utcOffset();
     
     const altTs = ts.clone().tz(tz.code);
     const offsetMins = altTs.utcOffset();
-    const tzDate = Number(altTs.format('YYYYMMDD'));
+    const tzDate = altTs.format('YYYYMMDD');
     
-    //TODO: edge case issue--if we are working from extreme edge cases of UTC-12 and UTC+14, we could actually have +2 or -2 days
-    ret.dayDiff = (tzDate < localDate ? -1 : (tzDate > localDate ? 1 : 0));
+    ret.dayDiff = moment(tzDate, 'YYYYMMDD').diff(moment(localDate, 'YYYYMMDD'), 'days');
     ret.tzTime = altTs.format(timeFormat);
     
     const offsetVsUtc = utils.formatOffsetMins(offsetMins);

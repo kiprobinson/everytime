@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const el = (q => document.querySelector(q));
   const els = (q => document.querySelectorAll(q));
   
+  
   function updateResults() {
     const ts = moment.tz(el('#planning_date').value + 'T' + el('#planning_time').value, el('#planning_timezone').value);
     let results = '';
@@ -30,12 +31,24 @@ document.addEventListener('DOMContentLoaded', function() {
     for(let i = -1; i < config.timezones.length; i++) {
       const tz = (i < 0 ? {code: el('#planning_timezone').value, label: 'Local Time'} : config.timezones[i]);
       const formatted = utils.formatTimestamp(ts, tz, config);
-      const diffDay = (formatted.dayDiff < 0 ? ' (-1 day)' : (formatted.dayDiff > 0 ? ' (+1 day)' : ''));
+      const diffDay = formatDayDiff(formatted.dayDiff);
       results += template.renderTemplate(resultTemplate, {label: formatted.label, timeDisplay: `${formatted.tzTime}${diffDay}`});
     }
     
     el('#planning_results').innerHTML = results;
   }
+  
+  function formatDayDiff(diff) {
+    if(diff === 0)
+      return '';
+    
+    const sign = diff < 0 ? '-' : '+';
+    const num = Math.abs(diff);
+    const days = num === 1 ? 'day' : 'days';
+    
+    return ` (${sign}${num} ${days})`;
+  }
+  
   
   //initialize listeners
   els('#planning_date, #planning_time, #planning_timezone').forEach(e => e.addEventListener('input', updateResults));
