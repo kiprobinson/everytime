@@ -37,7 +37,7 @@ exports.loadConfig = function() {
 };
 
 exports.serialize = function() {
-  return{
+  return {
     autoLaunch: exports.autoLaunch,
     timeFormat: exports.timeFormat,
     offsetDisplay: exports.offsetDisplay,

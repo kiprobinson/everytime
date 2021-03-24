@@ -3,6 +3,7 @@
 const moment = require('moment-timezone');
 
 const utils = {
+  
   /**
    * Formats offset minutes like "+0530", "-0800", etc.
    * @param offsetMins {Number}

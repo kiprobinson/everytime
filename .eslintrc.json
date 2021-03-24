@@ -39,7 +39,9 @@
     "indent": ["error", 2],
     "init-declarations": "error",
     "key-spacing": "error",
-    "keyword-spacing": ["error", { "before": false, "after": false, "overrides": { "const": { "after": true }, "try": { "after": true } } }],
+    "keyword-spacing": ["error", { "before": false, "after": false,
+        "overrides": { "const": { "after": true }, "try": { "after": true }, "return": { "after": true } }
+    }],
     "linebreak-style": "error",
     "lines-around-comment": ["error", { "beforeBlockComment": true, "beforeLineComment": true, "allowBlockStart": true }],
     "multiline-ternary": ["error", "never"],
