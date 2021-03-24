@@ -38,14 +38,18 @@ const utils = {
     const showUtcOffset = (config.offsetDisplay === 'both' || config.offsetDisplay === 'utc');
     const showLocalOffset = (config.offsetDisplay === 'both' || config.offsetDisplay === 'local');
     
-    const localTz = moment.tz.guess(true);
-    const localDate = Number(ts.tz(localTz).format('YYYYMMDD'));
-    const localOffsetMins = ts.tz(localTz).utcOffset();
+    const localTz = ts.tz() || moment.tz.guess(true);
+    const localTs = ts.clone().tz(localTz);
+    const localDate = Number(localTs.format('YYYYMMDD'));
+    const localOffsetMins = localTs.utcOffset();
     
-    const offsetMins = ts.tz(tz.code).utcOffset();
-    const tzDate = Number(ts.tz(tz.code).format('YYYYMMDD'));
+    const altTs = ts.clone().tz(tz.code);
+    const offsetMins = altTs.utcOffset();
+    const tzDate = Number(altTs.format('YYYYMMDD'));
+    
+    //TODO: edge case issue--if we are working from extreme edge cases of UTC-12 and UTC+14, we could actually have +2 or -2 days
     ret.dayDiff = (tzDate < localDate ? -1 : (tzDate > localDate ? 1 : 0));
-    ret.tzTime = ts.tz(tz.code).format(timeFormat);
+    ret.tzTime = altTs.format(timeFormat);
     
     const offsetVsUtc = utils.formatOffsetMins(offsetMins);
     const offsetVsLocal = utils.formatOffsetMins(offsetMins - localOffsetMins);

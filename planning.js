@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let results = '';
     
     for(let i = -1; i < config.timezones.length; i++) {
-      const tz = (i < 0 ? {code: moment.tz.guess(true), label: 'Local Time'} : config.timezones[i]);
+      const tz = (i < 0 ? {code: el('#planning_timezone').value, label: 'Local Time'} : config.timezones[i]);
       const formatted = utils.formatTimestamp(ts, tz, config);
       const diffDay = (formatted.dayDiff < 0 ? ' (-1 day)' : (formatted.dayDiff > 0 ? ' (+1 day)' : ''));
       results += template.renderTemplate(resultTemplate, {label: formatted.label, timeDisplay: `${formatted.tzTime}${diffDay}`});
