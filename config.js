@@ -12,7 +12,7 @@ if(autoLaunch === null)
   console.warn('AutoLaunch option will be ignored when running as a developer');
 
 const validTimezones = new Set(
-  utils.listAllZones().map(tz => tz.code)
+  utils.listAllZones().map(tz => tz.code),
 );
 
 exports.autoLaunch = false;

@@ -103,7 +103,7 @@ const utils = {
     });
     
     return tzList;
-  }
+  },
 };
 
 exports.utils = utils;
