@@ -69,6 +69,10 @@ const utils = {
     return ret;
   },
   
+  /**
+   * Lists all valid time zones.
+   * @returns array of objects 
+   */
   listAllZones() {
     const now = moment();
     
@@ -79,6 +83,27 @@ const utils = {
     zones.sort((a, b) => (a.offset - b.offset) || a.code.localeCompare(b.code));
     return zones;
   },
+  
+  /**
+   * Sorts timezones by their offsets
+   */
+  sortTimeZones(tzList) {
+    let janDate = moment((new Date()).setMonth(1));
+    let julDate = moment((new Date()).setMonth(7));
+    
+    let avgOffsets = {};
+    
+    tzList.sort(function(a, b) {
+      if(avgOffsets[a.code] === undefined)
+        avgOffsets[a.code] = (janDate.tz(a.code).utcOffset() + julDate.tz(a.code).utcOffset())/2;
+      if(avgOffsets[b.code] === undefined)
+        avgOffsets[b.code] = (janDate.tz(b.code).utcOffset() + julDate.tz(b.code).utcOffset())/2;
+      
+      return avgOffsets[a.code] - avgOffsets[b.code] || a.code.localeCompare(b.code);
+    });
+    
+    return tzList;
+  }
 };
 
 exports.utils = utils;

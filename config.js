@@ -2,6 +2,7 @@
 
 const {app} = require('electron');
 const fs = require('fs');
+const {utils} = require('./utils');
 const moment = require('moment-timezone');
 const AutoLaunch = require('auto-launch');
 
@@ -11,8 +12,7 @@ if(autoLaunch === null)
   console.warn('AutoLaunch option will be ignored when running as a developer');
 
 const validTimezones = new Set(
-  moment.tz.names()
-    .filter(tz => tz.match(/^(((Africa|America|Antarctica|Asia|Australia|Europe|Arctic|Atlantic|Indian|Pacific)\/.+)|(UTC))$/)),
+  utils.listAllZones().map(tz => tz.code)
 );
 
 exports.autoLaunch = false;
@@ -90,23 +90,7 @@ function sanitizeConfig() {
   exports.offsetDisplay = cleanConfig.offsetDisplay;
   exports.timezones = cleanConfig.timezones;
   
-  sortTimeZones();
-}
-
-function sortTimeZones() {
-  let janDate = moment((new Date()).setMonth(1));
-  let julDate = moment((new Date()).setMonth(7));
-  
-  let avgOffsets = {};
-  
-  exports.timezones.sort(function(a, b) {
-    if(avgOffsets[a.code] === undefined)
-      avgOffsets[a.code] = (janDate.tz(a.code).utcOffset() + julDate.tz(a.code).utcOffset())/2;
-    if(avgOffsets[b.code] === undefined)
-      avgOffsets[b.code] = (janDate.tz(b.code).utcOffset() + julDate.tz(b.code).utcOffset())/2;
-    
-    return avgOffsets[a.code] - avgOffsets[b.code];
-  });
+  utils.sortTimeZones(exports.timezones);
 }
 
 exports.saveConfig = function() {

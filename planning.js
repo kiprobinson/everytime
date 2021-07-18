@@ -28,8 +28,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const ts = moment.tz(el('#planning_date').value + 'T' + el('#planning_time').value, el('#planning_timezone').value);
     let results = '';
     
-    for(let i = -1; i < config.timezones.length; i++) {
-      const tz = (i < 0 ? {code: el('#planning_timezone').value, label: 'Local Time'} : config.timezones[i]);
+    const localTz = moment.tz.guess(true);
+    const planningTz = el('#planning_timezone').value;
+    
+    const timezones = [...config.timezones];
+    if(!timezones.some(tz => tz.code === localTz))
+      timezones.push({code: localTz, label: 'Local Time'});
+    if(!timezones.some(tz => tz.code === planningTz))
+      timezones.push({code: planningTz, label: planningTz});
+    
+    utils.sortTimeZones(timezones);
+    for(let i = 0; i < timezones.length; i++) {
+      const tz = timezones[i];
       const formatted = utils.formatTimestamp(ts, tz, config);
       const diffDay = formatDayDiff(formatted.dayDiff);
       results += template.renderTemplate(resultTemplate, {label: formatted.label, timeDisplay: `${formatted.tzTime}${diffDay}`});
