@@ -1,17 +1,33 @@
+@import url('fonts/OpenSans/OpenSans.css');
+@import url('fonts/FiraCode/FiraCode.css');
+
+
 * {
   box-sizing: border-box;
 }
 body {
-  font-family: "Segoe UI",Tahoma,Helvetica,sans-serif;
+  font-family: "Open Sans",sans-serif;
   font-size: 20px;
   background-color: #eee;
+  font-weight:  300;
+}
+b, strong, th {
+  font-weight: 600;
+}
+input, textarea, select, button {
+  font:  inherit;
+  font-size: 75%;
+}
+input[type=date], input[type=time] {
+  font-family: "Fira Code","Times New Roman",monospace,sans-serif;
+  font-weight: 300;
 }
 .optionRow {
   margin-bottom: 1.0em;
 }
 .optionLabel {
   width: 150px;
-  font-weight: bold;
+  font-weight: 600;
   display: inline-block;
   vertical-align: top;
 }
