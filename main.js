@@ -12,10 +12,13 @@ const config = require('./config');
 const {utils} = require('./utils');
 
 const isMacOs = process.platform === 'darwin';
-const iconExt = isMacOs ? 'png' : 'ico';
 
-const trayIconPath = path.join(__dirname, `icons/tray-icon-invert.${iconExt}`);
-const appIconPath = path.join(__dirname, `icons/app-icon.${iconExt}`);
+const trayIcon = isMacOs ? 'tray-icon-Template.png' : 'tray-icon-invert.ico';
+const appIcon = isMacOs ? 'app-icon.icns' : 'app-icon.ico';
+
+const trayIconPath = path.join(__dirname, `icons/${trayIcon}`);
+const appIconPath = path.join(__dirname, `icons/${appIcon}`);
+const dockIconPath = path.join(__dirname, `icons/app-icon.png`);
 
 let tray = null;
 let settingsWin = null;
@@ -154,6 +157,11 @@ function showPlanning() {
 
 app.on('ready', function() {
   tray = new Tray(trayIconPath);
+  
+  if (isMacOs) {
+    app.dock.setIcon(dockIconPath);
+    app.dock.hide();
+  }
   
   config.loadConfig();
   initSettingsWindow();
