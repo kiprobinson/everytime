@@ -49,7 +49,12 @@ function updateContextMenu() {
     const tz = (i < 0 ? {code: localTz, label: 'Local Time'} : config.timezones[i]);
     const formatted = utils.formatTimestamp(ts, tz, config);
     const diffDay = formatDayDiff(formatted.dayDiff);
-    template.push({label: formatted.label, sublabel: `${formatted.tzTime}${diffDay}`});
+    
+    if (isMacOs)
+      template.push({label: `${formatted.tzTime}${diffDay} - ${formatted.label}`});
+    else
+      template.push({label: formatted.label, sublabel: `${formatted.tzTime}${diffDay}`});
+    
     if(i < 0)
       template.push({type: 'separator'});
   }
