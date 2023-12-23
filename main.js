@@ -11,8 +11,11 @@ const url = require('url');
 const config = require('./config');
 const {utils} = require('./utils');
 
-const iconPath = path.join(__dirname, 'icons/tray-icon-invert.ico');
+const isMacOs = process.platform === 'darwin';
+const iconExt = isMacOs ? 'png' : 'ico';
 
+const trayIconPath = path.join(__dirname, `icons/tray-icon-invert.${iconExt}`);
+const appIconPath = path.join(__dirname, `icons/app-icon.${iconExt}`);
 
 let tray = null;
 let settingsWin = null;
@@ -82,7 +85,7 @@ function initSettingsWindow() {
     minWidth: 600,
     minHeight: 400,
     show: false,
-    icon: path.join(__dirname, 'icons/app-icon.ico'),
+    icon: appIconPath,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -117,7 +120,7 @@ function initPlanningWindow() {
     minWidth: 600,
     minHeight: 400,
     show: false,
-    icon: path.join(__dirname, 'icons/app-icon.ico'),
+    icon: appIconPath,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -150,7 +153,7 @@ function showPlanning() {
 }
 
 app.on('ready', function() {
-  tray = new Tray(iconPath);
+  tray = new Tray(trayIconPath);
   
   config.loadConfig();
   initSettingsWindow();

@@ -1,3 +1,5 @@
 Converted .png to .ico here: https://icoconvert.com/
 
 Used option "Multi-size in one icon", and selected 16, 32, 48, 64, 128, 256
+
+MacOS: must be a png. Default size 22px, and add files with same names with "@2x", "@3x", etc for hi-res
