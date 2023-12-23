@@ -62,3 +62,6 @@ typings/
 
 # MacOS images
 .DS_Store
+*~
+
+*-autosave.kra
