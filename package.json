@@ -13,13 +13,13 @@
     "node": ">=14.0.0"
   },
   "dependencies": {
-    "auto-launch": "^5.0.5",
-    "moment-timezone": "^0.5.33"
+    "auto-launch": "5.0.6",
+    "moment-timezone": "0.5.43"
   },
   "devDependencies": {
-    "electron": "^15.2.0",
-    "electron-packager": "^15.4.0",
-    "eslint": "^8.0.1"
+    "electron": "28.1.0",
+    "electron-packager": "17.1.2",
+    "eslint": "8.56.0"
   },
   "scripts": {
     "start": "electron .",
