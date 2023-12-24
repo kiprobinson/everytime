@@ -23,7 +23,8 @@
   },
   "scripts": {
     "start": "electron .",
-    "package": "electron-packager . Everytime --platform=win32 --arch=x64 --overwrite --icon=icons/app-icon.ico --out=build && electron-packager . Everytime --platform=win32 --arch=ia32 --overwrite --icon=icons/app-icon.ico --out=build",
+    "package-windows": "electron-packager . Everytime --platform=win32 --arch=x64 --overwrite --icon=icons/app-icon.ico --out=build && electron-packager . Everytime --platform=win32 --arch=ia32 --overwrite --icon=icons/app-icon.ico --out=build",
+    "package-mac": "electron-packager . Everytime --overwrite --icon=icons/app-icon.icns --out=build",
     "lint": "eslint \"**/*.js\" --format codeframe",
     "lintfix": "eslint \"**/*.js\" --format codeframe --fix"
   }

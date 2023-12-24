@@ -11,8 +11,14 @@ const url = require('url');
 const config = require('./config');
 const {utils} = require('./utils');
 
-const iconPath = path.join(__dirname, 'icons/tray-icon-invert.ico');
+const isMacOs = process.platform === 'darwin';
 
+const trayIcon = isMacOs ? 'tray-icon-Template.png' : 'tray-icon-invert.ico';
+const appIcon = isMacOs ? 'app-icon.icns' : 'app-icon.ico';
+
+const trayIconPath = path.join(__dirname, `icons/${trayIcon}`);
+const appIconPath = path.join(__dirname, `icons/${appIcon}`);
+const dockIconPath = path.join(__dirname, `icons/app-icon.png`);
 
 let tray = null;
 let settingsWin = null;
@@ -43,7 +49,12 @@ function updateContextMenu() {
     const tz = (i < 0 ? {code: localTz, label: 'Local Time'} : config.timezones[i]);
     const formatted = utils.formatTimestamp(ts, tz, config);
     const diffDay = formatDayDiff(formatted.dayDiff);
-    template.push({label: formatted.label, sublabel: `${formatted.tzTime}${diffDay}`});
+    
+    if (isMacOs)
+      template.push({label: `${formatted.tzTime}${diffDay} - ${formatted.label}`});
+    else
+      template.push({label: formatted.label, sublabel: `${formatted.tzTime}${diffDay}`});
+    
     if(i < 0)
       template.push({type: 'separator'});
   }
@@ -82,7 +93,7 @@ function initSettingsWindow() {
     minWidth: 600,
     minHeight: 400,
     show: false,
-    icon: path.join(__dirname, 'icons/app-icon.ico'),
+    icon: appIconPath,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -117,7 +128,7 @@ function initPlanningWindow() {
     minWidth: 600,
     minHeight: 400,
     show: false,
-    icon: path.join(__dirname, 'icons/app-icon.ico'),
+    icon: appIconPath,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -150,7 +161,12 @@ function showPlanning() {
 }
 
 app.on('ready', function() {
-  tray = new Tray(iconPath);
+  tray = new Tray(trayIconPath);
+  
+  if (isMacOs) {
+    app.dock.setIcon(dockIconPath);
+    app.dock.hide();
+  }
   
   config.loadConfig();
   initSettingsWindow();

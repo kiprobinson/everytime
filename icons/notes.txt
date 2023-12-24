@@ -1,3 +1,13 @@
 Converted .png to .ico here: https://icoconvert.com/
 
 Used option "Multi-size in one icon", and selected 16, 32, 48, 64, 128, 256
+
+
+---------
+
+MacOS:
+
+* Tray icon must be a png, filename ending with "Template" (case-sensitive). Default size 22px, and add files with same names with "@2x", "@3x", etc for hi-res
+
+* App icon- start with a 512x512 png, convert to .icns file with https://cloudconvert.com/png-to-icns
+

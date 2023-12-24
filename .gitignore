@@ -59,3 +59,9 @@ typings/
 
 # next.js build output
 .next
+
+# MacOS images
+.DS_Store
+*~
+
+*-autosave.kra
