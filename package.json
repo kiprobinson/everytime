@@ -10,7 +10,7 @@
   "main": "main.js",
   "private": true,
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=18.0.0"
   },
   "dependencies": {
     "auto-launch": "5.0.6",
