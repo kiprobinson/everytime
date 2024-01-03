@@ -18,7 +18,7 @@ const appIcon = isMacOs ? 'app-icon.icns' : 'app-icon.ico';
 
 const trayIconPath = path.join(__dirname, `icons/${trayIcon}`);
 const appIconPath = path.join(__dirname, `icons/${appIcon}`);
-const dockIconPath = path.join(__dirname, `icons/app-icon.png`);
+const dockIconPath = path.join(__dirname, 'icons/app-icon.png');
 
 let tray = null;
 let settingsWin = null;
@@ -50,7 +50,7 @@ function updateContextMenu() {
     const formatted = utils.formatTimestamp(ts, tz, config);
     const diffDay = formatDayDiff(formatted.dayDiff);
     
-    if (isMacOs)
+    if(isMacOs)
       template.push({label: `${formatted.tzTime}${diffDay} - ${formatted.label}`});
     else
       template.push({label: formatted.label, sublabel: `${formatted.tzTime}${diffDay}`});
@@ -163,7 +163,7 @@ function showPlanning() {
 app.on('ready', function() {
   tray = new Tray(trayIconPath);
   
-  if (isMacOs) {
+  if(isMacOs) {
     app.dock.setIcon(dockIconPath);
     app.dock.hide();
   }
