@@ -29,7 +29,7 @@ let menuVisible = false;
 
 TODO:
 
-Settings dialog- make selection for new timezone a typeahead.
+Settings dialog- make selection for new timezone a typeahead
 Create MSI installer with https://stackoverflow.com/questions/36398955/electron-create-msi-installer-using-electron-builder
 
 */
