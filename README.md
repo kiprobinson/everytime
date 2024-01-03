@@ -46,11 +46,13 @@ Right-click on the Everytime logo and select "Settings...". The application curr
 
 ## Development
 
-If you want to play around with this code, checkout the repo and then run `npm install`. Then you can issue the following commands:
+I use [`pnpm`][pnpm] instead of `npm`. You can install it with `npm install -g pnpm`.
 
-* `npm run start`: This will launch the app in development mode.
-* `npm run package-windows`: This will build binaries for 32- and 64-bit Windows architecture.
-* `npm run package-mac`: This will build binaries MacOS.
+If you want to play around with this code, checkout the repo and then run `pnpm install`. Then you can issue the following commands:
+
+* `pnpm run start`: This will launch the app in development mode.
+* `pnpm run package-windows`: This will build binaries for 32- and 64-bit Windows architecture.
+* `pnpm run package-mac`: This will build binaries MacOS.
 
 ## Support
 
@@ -58,3 +60,4 @@ If you have any questions or spot any issues, please open an issue on the GitHub
 
 
 [binaries]: https://tilde.ampersand.space/everytime/dist
+[pnpm]: https://pnpm.io/
