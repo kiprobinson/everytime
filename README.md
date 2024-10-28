@@ -16,18 +16,6 @@ Right-click on the Everytime logo in the system tray to see the current time in 
 
 There is no installer, just unzip the archive to some local directory and run the everytime.exe file to launch the application.
 
-## Mac Support
-
-You'll need to build the app yourself to run it:
-
-```
-npm install
-npm run package-mac
-```
-
-The built executable will be in `build/Everytime-darwin-<ARCHITECTURE>/Everytime.app`.
-
-
 ## Linux support
 
 I've only tested this on Windows and MacOS, and I only build the binaries for Windows. The Electron library that the app runs on should be cross-platform, but I have no means to test it. If you are interested, you can see the Development section below.
@@ -46,11 +34,13 @@ Right-click on the Everytime logo and select "Settings...". The application curr
 
 ## Development
 
-If you want to play around with this code, checkout the repo and then run `npm install`. Then you can issue the following commands:
+I use [`pnpm`][pnpm] instead of `npm`. You can install it with `npm install -g pnpm`.
 
-* `npm run start`: This will launch the app in development mode.
-* `npm run package-windows`: This will build binaries for 32- and 64-bit Windows architecture.
-* `npm run package-mac`: This will build binaries MacOS.
+If you want to play around with this code, checkout the repo and then run `pnpm install`. Then you can issue the following commands:
+
+* `pnpm run start`: This will launch the app in development mode.
+* `pnpm run package-windows`: This will build binaries for 32- and 64-bit Windows architecture.
+* `pnpm run package-mac`: This will build binaries MacOS.
 
 ## Support
 
@@ -58,3 +48,4 @@ If you have any questions or spot any issues, please open an issue on the GitHub
 
 
 [binaries]: https://tilde.ampersand.space/everytime/dist
+[pnpm]: https://pnpm.io/
