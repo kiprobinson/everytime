@@ -16,18 +16,6 @@ Right-click on the Everytime logo in the system tray to see the current time in 
 
 There is no installer, just unzip the archive to some local directory and run the everytime.exe file to launch the application.
 
-## Mac Support
-
-You'll need to build the app yourself to run it:
-
-```
-npm install
-npm run package-mac
-```
-
-The built executable will be in `build/Everytime-darwin-<ARCHITECTURE>/Everytime.app`.
-
-
 ## Linux support
 
 I've only tested this on Windows and MacOS, and I only build the binaries for Windows. The Electron library that the app runs on should be cross-platform, but I have no means to test it. If you are interested, you can see the Development section below.
