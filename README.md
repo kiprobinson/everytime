@@ -10,15 +10,16 @@ Everytime runs in the system tray and displays the current time local time in se
 
 Right-click on the Everytime logo in the system tray to see the current time in your selected time zones.
 
-## Download
+## Installation
 
-[Download the latest binaries at tilde.ampersand.space/everytime/dist][binaries].
+### Windows / MacOS
 
-There is no installer, just unzip the archive to some local directory and run the everytime.exe file to launch the application.
+1. [Download the latest binaries][binaries].
+1. Unzip the archive to some local directory and run the Everytime file to launch the application.
 
-## Linux support
+### Linux
 
-I've only tested this on Windows and MacOS, and I only build the binaries for Windows. The Electron library that the app runs on should be cross-platform, but I have no means to test it. If you are interested, you can see the Development section below.
+I've only tested this on Windows and MacOS. The Electron library that the app runs on should be cross-platform, but I have no means to test it. If you are interested, you can see the Development section below.
 
 ## Configuration
 
