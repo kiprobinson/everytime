@@ -18,7 +18,7 @@
   },
   "devDependencies": {
     "@electron/packager": "19.0.1",
-    "electron": "40.0.0",
+    "electron": "40.7.0",
     "eslint": "9.39.2"
   },
   "scripts": {
