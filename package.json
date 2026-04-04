@@ -14,12 +14,12 @@
   },
   "dependencies": {
     "auto-launch": "5.0.6",
-    "moment-timezone": "0.6.0"
+    "moment-timezone": "0.6.1"
   },
   "devDependencies": {
-    "@electron/packager": "19.0.1",
-    "electron": "40.0.0",
-    "eslint": "9.39.2"
+    "@electron/packager": "19.1.0",
+    "electron": "41.1.1",
+    "eslint": "10.2.0"
   },
   "scripts": {
     "start": "electron .",
